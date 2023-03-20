@@ -9,7 +9,15 @@ provider:
   memorySize: 256
   stage: ${opt:stage, 'dev'}
   region: ap-southeast-1
-  
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action: 
+            - dynamodb:PutItem
+          Resource: 
+            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/AuctionsTable
+
 functions:
   createAuction:
     handler: src/handlers/createAuction.handler
