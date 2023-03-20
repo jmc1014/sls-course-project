@@ -2,15 +2,15 @@
 
 ## Plugins
 
-| Plugin            | Links                                                                                        |
-| ----------------- | -------------------------------------------------------------------------------------------- |
-| Serverless        | [https://www.serverless.com/framework/docs/getting-started][pldb]                            |
-|                   | [https://www.npmjs.com/package/serverless][pldb]                                             |
-| serverless-bundle | [https://github.com/AnomalyInnovations/serverless-bundle][pldb]                              |
-|                   | [https://www.npmjs.com/package/serverless-bundle][pldb]                                      |
-| uuid              | [https://www.npmjs.com/package/uuid][pldb]                                                   |
-| DynamoDB Docs     | [https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html][pldb] |
-| Middy Middleware  | [https://github.com/middyjs/middy][pldb]                                                     |
+| Plugin            | Links                                                                                |
+| ----------------- | ------------------------------------------------------------------------------------ |
+| Serverless        | https://www.serverless.com/framework/docs/getting-started                            |
+|                   | https://www.npmjs.com/package/serverless                                             |
+| serverless-bundle | https://github.com/AnomalyInnovations/serverless-bundle                              |
+|                   | https://www.npmjs.com/package/serverless-bundle                                      |
+| uuid              | https://www.npmjs.com/package/uuid                                                   |
+| DynamoDB Docs     | https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html |
+| Middy Middleware  | https://github.com/middyjs/middy                                                     |
 
 ## Getting started
 
@@ -98,3 +98,12 @@ provider:
 - Do `sls deploy --verbose`
 - Test it in Postman
 - Verify it in DynamoDB -> Tables -> Items or Explore Items
+
+### Middy Middleware
+
+Currently there is a bug on the latest version of middy(^4.2.7) the recommendation is use the 2.5.7 version.
+
+```
+npm install @middy/core@2.5.7 @middy/http-error-handler@2.5.7 @middy/http-event-normalizer@2.5.7 @middy/http-json-body-parser@2.5.7
+
+```
