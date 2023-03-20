@@ -10,6 +10,7 @@
 |                   | [https://www.npmjs.com/package/serverless-bundle][pldb]                                      |
 | uuid              | [https://www.npmjs.com/package/uuid][pldb]                                                   |
 | DynamoDB Docs     | [https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html][pldb] |
+| Middy Middleware  | [https://github.com/middyjs/middy][pldb]                                                     |
 
 ## Getting started
 
