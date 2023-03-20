@@ -18,5 +18,17 @@
         "titleBar.inactiveBackground": "#8fd3ae99",
         "titleBar.inactiveForeground": "#15202b99"
     },
-    "peacock.color": "#8FD3AE"
+    "peacock.color": "#8FD3AE",
+    "yaml.customTags": [
+        "!Equals sequence",
+        "!FindInMap sequence",
+        "!GetAtt",
+        "!GetAZs",
+        "!ImportValue",
+        "!Join sequence",
+        "!Ref",
+        "!Select sequence",
+        "!Split sequence",
+        "!Sub"
+    ]
 }

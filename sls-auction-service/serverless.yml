@@ -9,14 +9,20 @@ provider:
   memorySize: 256
   stage: ${opt:stage, 'dev'}
   region: ap-southeast-1
+  environment:
+    AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
   iam:
     role:
       statements:
-        - Effect: 'Allow'
-          Action: 
-            - dynamodb:PutItem
-          Resource: 
-            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/AuctionsTable
+        - ${file(./iam/AuctionsTableIAM.yml):AuctionsTableIAM}
+  # iam:
+  #   role:
+  #     statements:
+  #       - Effect: 'Allow'
+  #         Action: 
+  #           - dynamodb:PutItem
+  #         Resource: 
+  #           - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/AuctionsTable
 
 functions:
   createAuction:
@@ -28,18 +34,22 @@ functions:
 
 resources:
   Resources:
-    AuctionsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: AuctionsTable
-        BillingMode: PAY_PER_REQUEST
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
+    AuctionsTable: ${file(./resources/AuctionsTable.yml):AuctionsTable}
+    # AuctionsTable:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #     TableName: AuctionsTable
+    #     BillingMode: PAY_PER_REQUEST
+    #     AttributeDefinitions:
+    #       - AttributeName: id
+    #         AttributeType: S
+    #     KeySchema:
+    #       - AttributeName: id
+    #         KeyType: HASH
 
 custom:
+  AuctionsTable:
+    name: !Ref AuctionsTable
+    arn: !GetAtt AuctionsTable.Arn
   bundle:
     linting: false # Setting 'false' for tutorial purposes only. Enable it if needed for Production. 
