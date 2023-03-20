@@ -1,15 +1,14 @@
-service:
-  name: sls-auction-service
+service: sls-auction-service
 
 plugins:
-  - serverless-bundle
-  - serverless-pseudo-parameters
+  - serverless-bundle 
 
 provider:
   name: aws
   runtime: nodejs12.x
   memorySize: 256
   stage: ${opt:stage, 'dev'}
+  region: ap-southeast-1
   
 functions:
   hello:
@@ -18,3 +17,7 @@ functions:
       - http:
           method: GET
           path: /hello
+
+custom:
+  bundle:
+    linting: false # Setting 'flase' for tutorial purposes only. Enable it if needed for Production. 
