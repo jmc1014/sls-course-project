@@ -26,10 +26,20 @@ cd YOUR_PROJECT_NAME
 
 ```
 sls deploy
+or
+sls deploy --verbose
 ```
 
 #### Deploy Serveless Service (stack)
 
 ```
 sls remove
+```
+
+#### Deploy Serveless specific function
+
+use this if createAuction.js is only changes for easy deploypment
+
+```
+sls deploy -f createAuction  --verbose
 ```
