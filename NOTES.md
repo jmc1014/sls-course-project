@@ -43,3 +43,21 @@ use this if createAuction.js is only changes for easy deploypment
 ```
 sls deploy -f createAuction  --verbose
 ```
+
+## DynamoDB
+
+```
+resources:
+  Resources:
+    AuctionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: AuctionsTable
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+```

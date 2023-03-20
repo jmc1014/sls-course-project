@@ -18,6 +18,20 @@ functions:
           method: POST
           path: /auction
 
+resources:
+  Resources:
+    AuctionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: AuctionsTable
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+
 custom:
   bundle:
-    linting: false # Setting 'flase' for tutorial purposes only. Enable it if needed for Production. 
+    linting: false # Setting 'false' for tutorial purposes only. Enable it if needed for Production. 
