@@ -9,3 +9,6 @@ export default (handler) =>
     httpEventNormalizer(),
     httpErrorHandler(),
   ]);
+
+// To consider if need to suppor custom msg for 400 response
+// https://github.com/dbartholomae/middy-middleware-json-error-handler

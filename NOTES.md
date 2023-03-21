@@ -185,7 +185,7 @@ provider:
 Currently there is a bug on the latest version of middy(^4.2.7) the recommendation is use the 2.5.7 version.
 
 ```
-npm install @middy/core@2.5.7 @middy/http-error-handler@2.5.7 @middy/http-event-normalizer@2.5.7 @middy/http-json-body-parser@2.5.7
+npm install @middy/core@2.5.7 @middy/http-error-handler@2.5.7 @middy/http-event-normalizer@2.5.7 @middy/http-json-body-parser@2.5.7 @middy/validator@2.5.7
 
 ```
 
