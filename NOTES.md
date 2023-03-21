@@ -49,6 +49,87 @@ sls deploy -f createAuction  --verbose
 
 ## DynamoDB
 
+### Info
+
+- High Availability
+- Performance
+- Durability
+- Schemaless
+- Records presented in JSON format
+- DynamoDB Streams
+  - An optional deature that allows you to react on new item creation, update or deletion in your DynamoDB Table
+
+**Components**
+
+- Tables
+- Items
+- Attributes
+
+**Query vs Scan**
+
+Scan
+
+- scans through each individual item in the database
+- have performance implications, that should be your last resort
+
+Query
+
+- query based on a primary key or secondary index
+- recommended way to operate at refular basis
+
+Primary Key
+
+- The primary key helps uniquely identify items in the table.
+- **Partition key**
+  - A simple primary key composed of one unique attribute
+  - Sample `"id": "5cc72af2-e67e-4185-98f3-6afbdcdddc09",`
+- **Composite Primary Key (partition key and sort key)**
+  - Composed of two attributes. The first one being the partition key and the second being the sort key
+  - partition key `"authoreId": "5cc72af2-e67e-4185-98f3-6afbdcdddc09",`
+  - sort key `"createdAt": "2023-03-21T03:46:05.545Z",`
+  - Cannot run query on sort key alone
+
+Secondary Indexes
+
+- can specify other keys apart from those you already defined as primary when you first created the table
+- can create one or more secondary indexes for a table.
+- **Global Secondary Index**
+  - An index with a partition key and sort key that can be different from those on the table
+  - can be specified on keys different from those that are defined as primary
+  - up to 20 global indexes per table
+- **Local Secondary Index**
+  - An index that has the same partition key as the table, but a different sort key
+
+**Read Consistency**
+
+- **Eventual Consistent Reads**
+  - The response might not reflect the results of a recently completed write operation.
+- **Strongly Consistent Reads**
+  - The response will reflect the most up-to-date data.
+  - might not be available due to network delay or outage
+  - potential highter latency
+  - Not supported on Global Secondary Indexes
+  - Use more throughput capacity, which could cost more monet
+
+**Read/Write Capacity Modes**
+
+- **On-Demand Mode**
+  - Flexible Mode
+  - Capable of serving thousands of requests per second.
+  - No need to plan your capacity ahead of time.
+  - Pay-per-requests - only pay for what you use.
+  - Elastically adapt to your workload as it changes.
+  - Delivery time usually single-digit millisecond latency (SLA)
+- **Provisioned Mode**
+  - Read and write capacity per second needs to be specified.
+  - Can specify auto-scaling rules to automatically adjust the capacity.
+  - Allows you to reserve capacity in advance, reducing the costs significantly
+  - Capacity is specified as Read Capacity Units(RCU) and Write Capacity Units.
+    - RCU: One RCU represents one strong consistent read per second, or two eventually consistent reads per second, for up to 4kb in size.
+    - WCU: One WCU represents one write per second, for an item up to 1KB in size
+
+### serverless.yml
+
 ```
 resources:
   Resources:
@@ -106,4 +187,46 @@ Currently there is a bug on the latest version of middy(^4.2.7) the recommendati
 ```
 npm install @middy/core@2.5.7 @middy/http-error-handler@2.5.7 @middy/http-event-normalizer@2.5.7 @middy/http-json-body-parser@2.5.7
 
+```
+
+### Scheduler
+
+##### serverless.yml
+
+```
+processAuction:
+  handler: src/handlers/processAuction.handler
+  events:
+    - schedule: rate(1 minute)
+```
+
+After it deploy check it in Amazon EventBridge
+
+- Amazon EventBridge
+- Rules
+
+#### View the logs
+
+For List all the logs
+
+```
+ sls logs -f processAuction
+```
+
+For Tailing the logs (-t)
+
+```
+ sls logs -f processAuction -t
+```
+
+For 1 minute/hour ago (--startTime 1m/1h)
+
+```
+ sls logs -f processAuction --startTime  1m
+```
+
+For invoking to view the logs on local or for testing purpose
+
+```
+ sls invoke -f processAuction -l
 ```
