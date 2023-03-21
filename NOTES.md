@@ -180,7 +180,7 @@ provider:
 - Test it in Postman
 - Verify it in DynamoDB -> Tables -> Items or Explore Items
 
-### Middy Middleware
+## Middy Middleware
 
 Currently there is a bug on the latest version of middy(^4.2.7) the recommendation is use the 2.5.7 version.
 
@@ -189,7 +189,7 @@ npm install @middy/core@2.5.7 @middy/http-error-handler@2.5.7 @middy/http-event-
 
 ```
 
-### Scheduler
+## Scheduler
 
 ##### serverless.yml
 
