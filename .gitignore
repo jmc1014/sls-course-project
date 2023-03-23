@@ -142,9 +142,6 @@ bower_components
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
 
-# Dependency directories
-node_modules/
-jspm_packages/
 
 # TypeScript v1 declaration files
 typings/
@@ -196,8 +193,6 @@ dist
 # vuepress build output
 .vuepress/dist
 
-# Serverless directories
-.serverless/
 
 # FuseBox cache
 .fusebox/
@@ -245,3 +240,8 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+
+
+  
+*.pem
+.webpack

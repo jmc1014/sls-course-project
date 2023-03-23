@@ -1,5 +1,7 @@
 # NOTES: Serveless Project 01
 
+Current Node Version: node 16.15.1 to 14.21.3
+
 ## Plugins
 
 | Plugin            | Links                                                                                |
@@ -11,6 +13,8 @@
 | uuid              | https://www.npmjs.com/package/uuid                                                   |
 | DynamoDB Docs     | https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html |
 | Middy Middleware  | https://github.com/middyjs/middy                                                     |
+| Auth0             | https://auth0.com/                                                                   |
+| JWT               | https://jwt.io/                                                                      |
 
 ## Getting started
 
@@ -229,4 +233,77 @@ For invoking to view the logs on local or for testing purpose
 
 ```
  sls invoke -f processAuction -l
+```
+
+## Auth0
+
+1. Signin
+1. Create Application
+1. Setting
+1. Allowed Callback URLs - http://localhost:3000
+1. Allowed Logout URLs - http://localhost:3000
+1. Allowed Web Origins - http://localhost:3000
+1. Advance Settings
+1. Grant Types - Tick Password
+1. Default Directory - Username-Password-Authentication
+
+**In Postman**
+
+- YOUR_AUTH0_DOMAIN: Application -> Settings -> Domain
+- YOUR_AUTH0_CLIENT_ID : Application -> Settings -> Client ID
+- YOUR_AUTH0_IDENTIFIER: Application -> APIs -> Auth0 Management API -> Identifier
+
+```
+  curl --location --request POST 'https://YOUR_AUTH0_DOMAIN/oauth/token' \
+  --header 'Content-Type: application/x-www-form-urlencoded' \
+  --data-urlencode 'client_id=YOUR_AUTH0_CLIENT_ID' \
+  --data-urlencode 'username=YOUR_USERNAME' \
+  --data-urlencode 'password=YOUR_PASSWORD' \
+  --data-urlencode 'grant_type=password' \
+  --data-urlencode 'scope=openid' \
+  --data-urlencode 'audience=YOUR_AUTH0_IDENTIFIER'
+```
+
+**On Postman - Test Script**
+
+```
+var data = JSON.parse(responseBody);
+postman.setEnvironmentVariable("token", data.id_token);
+
+console.log('data', data.id_token);
+pm.test("Status code is 200", function () {
+    console.log('200', postman.getEnvironmentVariable("AUTH_TOKEN"));
+    pm.response.to.have.status(200);
+});
+```
+
+**Get Certificate - for auth sls**
+Applications -> Advanced Settings -> Certificates
+Copy and Paste it in `secret.pem`
+
+**Bug on deplyoment**
+
+```
+CREATE_FAILED: PublicEndpointLambdaFunction (AWS::Lambda::Function)
+Resource handler returned message: "Uploaded file must be a non-empty zip
+```
+
+the fix is to downgrade my node version to v14.21.3 https://nodejs.org/dist/latest-v14.x
+then npm install to update the packages. Node v19.8.1 does not work.
+
+**Secure Service using Authorizer**
+
+- CloudForamtion -> Stack -> auth-services-dev(stack) -> Resources Tab
+- Search "LambdaFunction" -> CLick Physical ID -> Copy the ARN
+- Paste it in Serveless.ytml functions on authorizer
+
+```
+functions:
+  createAuction:
+    handler: src/handlers/createAuction.handler
+    events:
+      - http:
+          method: POST
+          path: /auction
+          authorizer: YOUR_ARN_CODE
 ```
