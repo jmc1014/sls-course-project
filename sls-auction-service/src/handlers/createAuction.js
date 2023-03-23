@@ -24,6 +24,7 @@ async function createAuction(event, context) {
       amount: 0,
     },
     seller: email,
+    pictureUrl: null,
   };
 
   try {

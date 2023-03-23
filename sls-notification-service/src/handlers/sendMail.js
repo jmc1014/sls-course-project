@@ -10,7 +10,7 @@ async function sendMail(event, context) {
   const { subject, body, recipient } = email;
 
   const params = {
-    Source: "source@gmail.com", // Email that registered & verified in Amazon SES
+    Source: "jmc.0411.dev01@gmail.com", // Email that registered & verified in Amazon SES
     Destination: {
       ToAddresses: [recipient],
     },

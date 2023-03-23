@@ -12,11 +12,13 @@ provider:
   environment:
     AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
     MAIL_QUEUE_URL: ${self:custom.MailQueue.url}
+    AUCTIONS_BUCKET_NAME: ${self:custom.AuctionsBucket.name}
   iam:
     role:
       statements:
         - ${file(./iam/AuctionsTableIAM.yml):AuctionsTableIAM}
         - ${file(./iam/MailQueueIAM.yml):MailQueueIAM}
+        - ${file(./iam/AuctionsBucketIAM.yml):AuctionsBucketIAM}
   # iam:
   #   role:
   #     statements:
@@ -25,6 +27,23 @@ provider:
   #           - dynamodb:PutItem
   #         Resource: 
   #           - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/AuctionsTable
+
+resources:
+  Resources:
+    AuctionsTable: ${file(./resources/AuctionsTable.yml):AuctionsTable}
+    AuctionsBucket: ${file(./resources/AuctionsBucket.yml):AuctionsBucket}
+    AuctionsBucketPolicy: ${file(./resources/AuctionsBucket.yml):AuctionsBucketPolicy}
+    # AuctionsTable:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #     TableName: AuctionsTable
+    #     BillingMode: PAY_PER_REQUEST
+    #     AttributeDefinitions:
+    #       - AttributeName: id
+    #         AttributeType: S
+    #     KeySchema:
+    #       - AttributeName: id
+    #         KeyType: HASH
 
 functions:
   createAuction:
@@ -59,25 +78,19 @@ functions:
           path: /auction/{id}/bid
           authorizer: ${self:custom.authorizer}
   
+  uploadAuctionPicture:
+    handler: src/handlers/uploadAuctionPicture.handler
+    events:
+      - http:
+          method: PATCH
+          path: /auction/{id}/picture
+          authorizer: ${self:custom.authorizer}
+
   processAuction:
     handler: src/handlers/processAuction.handler
     # events:
     #   - schedule: rate(1 minute)
 
-resources:
-  Resources:
-    AuctionsTable: ${file(./resources/AuctionsTable.yml):AuctionsTable}
-    # AuctionsTable:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #     TableName: AuctionsTable
-    #     BillingMode: PAY_PER_REQUEST
-    #     AttributeDefinitions:
-    #       - AttributeName: id
-    #         AttributeType: S
-    #     KeySchema:
-    #       - AttributeName: id
-    #         KeyType: HASH
 
 custom:
   authorizer: arn:aws:lambda:${aws:region}:${aws:accountId}:function:sls-auth-service-${self:provider.stage}-auth
@@ -87,5 +100,11 @@ custom:
   MailQueue:
     arn: ${cf:sls-notification-service-${self:provider.stage}.MailQueueArn}
     url: ${cf:sls-notification-service-${self:provider.stage}.MailQueueUrl}
+  AuctionsBucket:
+    name: auctions-bucket-site-upload-01-${self:provider.stage}
   bundle:
     linting: false # Setting 'false' for tutorial purposes only. Enable it if needed for Production. 
+
+
+
+    
