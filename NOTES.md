@@ -15,6 +15,7 @@ Current Node Version: node 16.15.1 to 14.21.3
 | Middy Middleware  | https://github.com/middyjs/middy                                                     |
 | Auth0             | https://auth0.com/                                                                   |
 | JWT               | https://jwt.io/                                                                      |
+| Amazon SQS        | https://docs.aws.amazon.com/sqs/                                                     |
 
 ## Getting started
 
@@ -361,3 +362,43 @@ async function sendMail(event, context) {
 
 export const handler = sendMail;
 ```
+
+**View logs**
+
+```
+sls logs -f sendMail -t
+```
+
+## Amazon SQS (Simple Message Queue)
+
+#### Benefits
+
+- **Security:** granular control over who can send and receive messages. Messages can be encrypted durability.
+- **Durability:** Amazon SQS stores messages on multiple servers.
+- **Availability:** Highly concurrent access to messages and high availability for message production and consumption.
+- **Scalability:** SQS auto-scales to handle any load increase or spike without any instructions needed from your side.
+- **Reliability:** Messages can reliably be sent by multiple producers and multiple consumers at the same time.
+- **Customization:** Can set default delays, retention period, variable message sizes, message splitting and etc..
+
+#### Que Types
+
+**Standar Queue**
+
+- ofers maximu throuhput
+- At-least-once delivery
+- Best-effort ordering
+
+**FIFO Queue(First In, Firt Out)**
+
+- First-in-first-out(guarante order)
+- Messages processed exactly once
+- Limited throughput
+
+#### Dead Letter Queue
+
+a dead letter qeue is just a standard SQS. Qeue But it just serves a different purpose.
+
+#### SQS Pricing
+
+- Pay based on your usage. No minimum fee.
+- First 1 million monthly request are free
