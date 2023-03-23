@@ -1,0 +1,23 @@
+service: sls-notification-service
+
+plugins:
+  - serverless-bundle 
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: ap-southeast-1
+  iam:
+    role:
+      statements:
+        - ${file(./iam/SendMailIAM.yml):SendMailIAM}
+  
+functions:
+  sendMail:
+    handler: src/handlers/sendMail.handler
+
+custom:
+  bundle:
+    linting: false

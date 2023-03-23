@@ -307,3 +307,57 @@ functions:
           path: /auction
           authorizer: YOUR_ARN_CODE
 ```
+
+## Amazon SES
+
+Place all new accounts in the Amazon SES sandbox
+following restrictions to your account on sandbox mode
+
+- You can only send mail to verified email addresses and domains, or to the Amazon SES mailbox simulator.
+- You can send a maximum of 200 messages per 24-hour period.
+- You can send a maximum of 1 message per second.
+- For sending authorization, neither you nor the delegate sender can send email to non-verified email addresses.
+- For account-level suppression, bulk actions and SES API calls related to suppression list management are disabled.
+
+Add the email to send and verified it.
+
+**To manual trigge the function**
+
+```
+sls invoke -f sendMail -l
+```
+
+```
+import AWS from "aws-sdk";
+
+const ses = new AWS.SES({ region: "ap-southeast-1" });
+
+async function sendMail(event, context) {
+  const params = {
+    Source: "sender@test.com", // Email that registered & verified in Amazon SES
+    Destination: {
+      ToAddresses: ["receipeint@test.com"],
+    },
+    Message: {
+      Body: {
+        Text: {
+          Data: "Hello from Coding James",
+        },
+      },
+      Subject: {
+        Data: "Test Mail Subject",
+      },
+    },
+  };
+
+  try {
+    const result = await ses.sendEmail(params).promise();
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const handler = sendMail;
+```
